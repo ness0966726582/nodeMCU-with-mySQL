@@ -1,106 +1,82 @@
-/* Code Written by Rishi Tiwari
- *  Website:- https://tricksumo.com
+/**
+   StreamHTTPClient.ino
+
+    Created on: 24.05.2015
+  Ness Huang 
+  1.目前已確認可連接http 取得web資訊
+  2.待確認-是否可以透過目標的php轉寫參數到指定資料庫
+
 */
 
-
+#include <Arduino.h>
 
 #include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 
-// Update HOST URL here
-
-#define HOST "ness-pj001.000webhostapp.com"          // Enter HOST URL without "http:// "  and "/" at the end of URL
-
-#define WIFI_SSID "Ness-2.4G"            // WIFI SSID here                                   
-#define WIFI_PASSWORD "12345678"        // WIFI password here
-
-// Declare global variables which will be uploaded to server
+ESP8266WiFiMulti WiFiMulti;
 
 int val = 1;
 int val2 = 99;
 
 String sendval, sendval2, postData;
 
-
 void setup() {
+  Serial.begin(115200); 
+  Serial.println("Communication Started \n\n");  
+  delay(1000);
 
-     
-Serial.begin(115200); 
-Serial.println("Communication Started \n\n");  
-delay(1000);
+  Serial.println();
+  Serial.println();
+  Serial.println();
   
+  pinMode(LED_BUILTIN, OUTPUT);     // initialize built in led on the board
 
-pinMode(LED_BUILTIN, OUTPUT);     // initialize built in led on the board
- 
-
-
-WiFi.mode(WIFI_STA);           
-WiFi.begin(WIFI_SSID, WIFI_PASSWORD);                                     //try to connect with wifi
-Serial.print("Connecting to ");
-Serial.print(WIFI_SSID);
-while (WiFi.status() != WL_CONNECTED) 
-{ Serial.print(".");
-    delay(500); }
-
-Serial.println();
-Serial.print("Connected to ");
-Serial.println(WIFI_SSID);
-Serial.print("IP Address is : ");
-Serial.println(WiFi.localIP());    //print local IP address
-
-delay(30);
+  WiFi.mode(WIFI_STA);
+  WiFiMulti.addAP("Ness-2.4G", "12345678");
 }
 
+void loop() {
+  // wait for WiFi connection
+  if ((WiFiMulti.run() == WL_CONNECTED)) {
+    
+    WiFiClient client;
+
+    HTTPClient http;    // http object of clas HTTPClient
+    // Convert integer variables to string
+    sendval = String(val);  
+    sendval2 = String(val2);    
+
+    // configure server and url
+    http.begin(client, "http://ness-pj001.000webhostapp.com/dbwrite.php");
+    //http.begin(client, "http://ness-pj001.000webhostapp.com/dbread.php");//
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");            //Specify content-type header
+
+    int httpCode = http.POST(postData);   // Send POST request to php file and store server response code in variable named httpCode
+    Serial.println("Values are, sendval = " + sendval + " and sendval2 = "+sendval2 );
 
 
-void loop() { 
+    // if connection eatablished then do this
+    if (httpCode == 200) { Serial.println("Values uploaded successfully."); Serial.println(httpCode); 
+    String webpage = http.getString();    // Get html webpage output and store it in a string
+    Serial.println(webpage + "\n"); 
+    }
 
-HTTPClient http;    // http object of clas HTTPClient
+    // if failed to connect then return and restart
 
-
-// Convert integer variables to string
-sendval = String(val);  
-sendval2 = String(val2);   
-
- 
-postData = "sendval=" + sendval + "&sendval2=" + sendval2;
-
-// We can post values to PHP files as  example.com/dbwrite.php?name1=val1&name2=val2&name3=val3
-// Hence created variable postDAta and stored our variables in it in desired format
-// For more detials, refer:- https://www.tutorialspoint.com/php/php_get_post.htm
-
-// Update Host URL here:-  
-  
-http.begin("http://ness-pj001.000webhostapp.com/dbwrite.php");              // Connect to host where MySQL databse is hosted
-http.addHeader("Content-Type", "application/x-www-form-urlencoded");            //Specify content-type header
-
-  
- 
-int httpCode = http.POST(postData);   // Send POST request to php file and store server response code in variable named httpCode
-Serial.println("Values are, sendval = " + sendval + " and sendval2 = "+sendval2 );
+    else { 
+      Serial.println(httpCode); 
+      Serial.println("Failed to upload values. \n"); 
+      http.end(); 
+      return; }
 
 
-// if connection eatablished then do this
-if (httpCode == 200) { Serial.println("Values uploaded successfully."); Serial.println(httpCode); 
-String webpage = http.getString();    // Get html webpage output and store it in a string
-Serial.println(webpage + "\n"); 
-}
+    delay(3000); 
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(3000);
+    digitalWrite(LED_BUILTIN, HIGH);
 
-// if failed to connect then return and restart
-
-else { 
-  Serial.println(httpCode); 
-  Serial.println("Failed to upload values. \n"); 
-  http.end(); 
-  return; }
-
-
-delay(3000); 
-digitalWrite(LED_BUILTIN, LOW);
-delay(3000);
-digitalWrite(LED_BUILTIN, HIGH);
-
-val+=1; val2+=10; // Incrementing value of variables
-
+    val+=1; val2+=10; // Incrementing value of variables
+    }
 
 }
