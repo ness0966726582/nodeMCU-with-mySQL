@@ -3,8 +3,8 @@
 
     Created on: 24.05.2015
   Ness Huang 
-  1.目前已確認可連接http 取得web資訊
-  2.待確認-是否可以透過目標的php轉寫參數到指定資料庫
+  1.已確認-可連接http 取得web資訊
+  2.未確認-可以透過目標的php轉寫參數到指定資料庫
 
 */
 
@@ -16,7 +16,7 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-int val = 1;
+int val = 2;
 int val2 = 99;
 
 String sendval, sendval2, postData;
@@ -43,13 +43,13 @@ void loop() {
     WiFiClient client;
 
     HTTPClient http;    // http object of clas HTTPClient
+
     // Convert integer variables to string
     sendval = String(val);  
     sendval2 = String(val2);    
+    postData = "sendval=" + sendval + "&sendval2=" + sendval2;
 
-    // configure server and url
     http.begin(client, "http://ness-pj001.000webhostapp.com/dbwrite.php");
-    //http.begin(client, "http://ness-pj001.000webhostapp.com/dbread.php");//
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");            //Specify content-type header
 
     int httpCode = http.POST(postData);   // Send POST request to php file and store server response code in variable named httpCode
@@ -65,10 +65,7 @@ void loop() {
     // if failed to connect then return and restart
 
     else { 
-      Serial.println(httpCode); 
-      Serial.println("Failed to upload values. \n"); 
-      http.end(); 
-      return; }
+      Serial.println(httpCode);       Serial.println("Failed to upload values. \n");       http.end();       return; }
 
 
     delay(3000); 
@@ -76,7 +73,7 @@ void loop() {
     delay(3000);
     digitalWrite(LED_BUILTIN, HIGH);
 
-    val+=1; val2+=10; // Incrementing value of variables
+    //val+=1; val2+=10; // Incrementing value of variables
     }
 
 }
