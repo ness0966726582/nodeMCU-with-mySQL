@@ -5,7 +5,7 @@
   Ness Huang 
   1.已確認-可連接http 取得web資訊
   2.已確認-可以透過目標的php轉寫參數到指定資料庫
-  3.待確認-寫入指定資料庫 
+  3.待確認-將iot設備根據id寫入指定行 
 */
 
 #include <Arduino.h>
