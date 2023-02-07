@@ -1,11 +1,11 @@
 /**
    StreamHTTPClient.ino
 
-    Created on: 24.05.2015
+    Created on: 2023.02.07
   Ness Huang 
   1.已確認-可連接http 取得web資訊
-  2.未確認-可以透過目標的php轉寫參數到指定資料庫
-
+  2.已確認-可以透過目標的php轉寫參數到指定資料庫
+  3.待確認-寫入指定資料庫 
 */
 
 #include <Arduino.h>
@@ -16,8 +16,9 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-int val = 2;
-int val2 = 99;
+int id = 1;    //iot設備ID
+int val = 25;
+int val2 = 55;
 
 String sendval, sendval2, postData;
 
