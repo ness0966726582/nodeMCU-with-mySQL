@@ -1,7 +1,7 @@
 # nodeMCU-with-mySQL
 FreeWeb 託管測試可行性方案
 
-sensorUsed ---> 存放傳感器測試使用
+SensorUsed ---> 存放傳感器測試使用
 
 Success_v1 ---> 初步完成數據上傳
 
