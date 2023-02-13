@@ -38,7 +38,7 @@ else { echo "Connected to mysql database. "; }
 	        //$sql = "INSERT INTO bbi_nodemcu (id,area_id,val1, val2, date, time) VALUES ('".$id."','".$area_id."','".$val1."','".$val2."', '".$d."', '".$t."')"; 
             
             //SQL更新語法
-            $sql = "UPDATE bbi_nodemcu SET id='".$id."', area_id ='".$area_id."', val1='".$val1."', val2 ='".$val2."', date ='".$d."', time ='".$t."' WHERE id=1";
+            $sql = "UPDATE bbi_nodemcu SET id='".$id."', area_id ='".$area_id."', val1='".$val1."', val2 ='".$val2."', date ='".$d."', time ='".$t."' WHERE id='".$id."' ";
             
 		if ($conn->query($sql) === TRUE) {
 		    echo "Values inserted in MySQL database table.";
