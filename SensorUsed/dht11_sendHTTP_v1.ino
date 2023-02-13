@@ -91,7 +91,7 @@ void loop() {
     sendval2 = String(val2);    
     postData = "nodeMCU_id=" + nodeMCU_id + "&area_id=" + area_id + "&sendval1=" + sendval1 + "&sendval2=" + sendval2;
 
-    http.begin(client, "http://ness-pj001.000webhostapp.com/dbwrite-dht11.php");
+    http.begin(client, "http://ness-pj001.000webhostapp.com/dbwrite-dht11_v1.php");
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");            //Specify content-type header
 
     int httpCode = http.POST(postData);   // Send POST request to php file and store server response code in variable named httpCode
