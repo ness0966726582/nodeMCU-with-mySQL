@@ -5,27 +5,23 @@
   Home
 */
 
-
-const int magnet_switch = 5;     // Magnet switch D1 -> GPIO 5
-const int ledPin =  13;      // LED pin
+const int magnet_switch = 5;  // Magnet switch D1 -> GPIO 5
+int val1 = 0;           // 初始值
 
 void setup() {
-  // initialize the LED pin as an output:
-  pinMode(ledPin, OUTPUT);
-  // initialize the pushbutton pin as an input:
-  pinMode(magnet_switch, INPUT_PULLUP);
+  pinMode(ledPin, OUTPUT);  // initialize the LED pin as an output:
+  pinMode(magnet_switch, INPUT_PULLUP);  // initialize the pushbutton pin as an input:
 
   Serial.begin(9600);
 }
 
 void loop() {
-  if (digitalRead(magnet_switch) == LOW) {
-    Serial.println("Switch Closed");
-    digitalWrite(ledPin, HIGH);
-    //while (digitalRead(magnet_switch) == LOW) {}
+  if (digitalRead(magnet_switch) == LOW) {      
+    val1 = 0;
+    Serial.print(val1);    Serial.println("Switch Closed");    
   }
-  else {
-    digitalWrite(ledPin, LOW);
-    Serial.println("Switch Open");
+  else {    
+    val1 = 1;
+    Serial.print(val1);    Serial.println("Switch Open");
   }
 } 
